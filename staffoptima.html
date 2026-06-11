@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StaffOptima Bank — Workforce Intelligence Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d0f14;
+  --bg2: #13161d;
+  --bg3: #1a1e27;
+  --bg4: #222733;
+  --border: #2a2f3d;
+  --border2: #343b4f;
+  --text: #e8eaf0;
+  --text2: #9aa3b8;
+  --text3: #5d6478;
+  --accent: #4f8ef7;
+  --accent2: #3a7bd5;
+  --green: #2ecc71;
+  --yellow: #f1c40f;
+  --red: #e74c3c;
+  --purple: #9b59b6;
+  --orange: #e67e22;
+  --teal: #1abc9c;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; font-size: 14px; }
+.mono { font-family: 'JetBrains Mono', monospace; }
+
+/* Header */
+header { background: var(--bg2); border-bottom: 1px solid var(--border); padding: 8px 24px; display: flex; align-items: center; gap: 16px 24px; min-height: 56px; flex-wrap: wrap; position: sticky; top: 0; z-index: 100; }
+nav { min-width: 200px; }
+.logo { font-weight: 700; font-size: 16px; color: var(--text); white-space: nowrap; }
+.logo span { color: var(--accent); }
+nav { display: flex; gap: 2px; flex: 1; overflow-x: auto; }
+nav button { background: none; border: none; color: var(--text2); padding: 8px 14px; border-radius: 6px; cursor: pointer; white-space: nowrap; font-size: 13px; font-family: inherit; transition: all .15s; }
+nav button:hover { background: var(--bg3); color: var(--text); }
+nav button.active { background: var(--bg3); color: var(--accent); font-weight: 500; }
+.api-key-wrap { display: flex; align-items: center; gap: 8px; }
+.api-key-wrap label { font-size: 11px; color: var(--text3); white-space: nowrap; }
+.api-input { background: var(--bg3); border: 1px solid var(--border); color: var(--text); padding: 5px 10px; border-radius: 6px; font-size: 12px; width: 200px; font-family: 'JetBrains Mono', monospace; }
+.api-input:focus { outline: none; border-color: var(--accent); }
+
+/* Layout */
+.page { display: none; }
+.page.active { display: flex; height: calc(100vh - 56px); }
+.sidebar { width: 340px; min-width: 340px; background: var(--bg2); border-right: 1px solid var(--border); overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 16px; }
+.main { flex: 1; overflow-y: auto; padding: 24px; display: flex; flex-direction: column; gap: 20px; }
+
+/* Sidebar */
+.sidebar-section { background: var(--bg3); border-radius: 10px; padding: 14px; }
+.sidebar-section h3 { font-size: 11px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: .8px; margin-bottom: 12px; }
+.field { margin-bottom: 10px; }
+.field label { display: block; font-size: 12px; color: var(--text2); margin-bottom: 4px; }
+.field input, .field select, .field textarea { width: 100%; background: var(--bg4); border: 1px solid var(--border); color: var(--text); padding: 7px 10px; border-radius: 6px; font-size: 13px; font-family: inherit; }
+.field textarea { resize: vertical; min-height: 60px; }
+.field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--accent); }
+.field select option { background: var(--bg4); }
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 16px; border-radius: 7px; border: none; cursor: pointer; font-size: 13px; font-family: inherit; font-weight: 500; transition: all .15s; }
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: var(--accent2); }
+.btn-secondary { background: var(--bg4); color: var(--text); border: 1px solid var(--border2); }
+.btn-secondary:hover { background: var(--border); }
+.btn-sm { padding: 5px 10px; font-size: 12px; }
+.btn-danger { background: rgba(231,76,60,.15); color: var(--red); border: 1px solid rgba(231,76,60,.3); }
+.btn-danger:hover { background: rgba(231,76,60,.25); }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+.btn-full { width: 100%; justify-content: center; }
+
+/* Cards */
+.card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+.card-title { font-size: 13px; font-weight: 600; color: var(--text2); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+.card-title .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+
+/* Metrics grid */
+.metrics-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+.metric { background: var(--bg3); border-radius: 10px; padding: 16px; }
+.metric-label { font-size: 11px; color: var(--text3); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .5px; }
+.metric-value { font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', monospace; margin-bottom: 4px; }
+.metric-sub { font-size: 11px; color: var(--text3); }
+.metric-badge { display: inline-block; padding: 2px 7px; border-radius: 4px; font-size: 10px; font-weight: 600; margin-top: 4px; }
+.badge-green { background: rgba(46,204,113,.15); color: var(--green); }
+.badge-yellow { background: rgba(241,196,15,.15); color: var(--yellow); }
+.badge-red { background: rgba(231,76,60,.15); color: var(--red); }
+.badge-blue { background: rgba(79,142,247,.15); color: var(--accent); }
+
+/* AI block */
+.ai-block { background: var(--bg3); border-radius: 10px; padding: 18px; border-left: 3px solid var(--accent); }
+.ai-block h4 { font-size: 12px; color: var(--text2); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+.ai-block .ai-icon { color: var(--accent); font-size: 14px; }
+.ai-content { font-size: 13px; color: var(--text2); line-height: 1.7; white-space: pre-wrap; }
+.ai-content.loading { display: flex; align-items: center; gap: 8px; color: var(--text3); }
+
+/* Spinner */
+.spinner { width: 16px; height: 16px; border: 2px solid var(--border2); border-top-color: var(--accent); border-radius: 50%; animation: spin .8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .4; } }
+.pulse { animation: pulse 1.5s ease-in-out infinite; }
+
+/* Empty state */
+.empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 60px 20px; color: var(--text3); text-align: center; }
+.empty-state .icon { font-size: 40px; opacity: .4; }
+.empty-state p { font-size: 13px; max-width: 300px; line-height: 1.6; }
+
+/* DMI */
+.dmi-bar { height: 8px; background: var(--bg4); border-radius: 4px; overflow: hidden; margin-top: 8px; }
+.dmi-fill { height: 100%; border-radius: 4px; transition: width .5s; }
+.dmi-score { font-size: 32px; font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+
+/* Bar chart */
+.bar-chart { display: flex; flex-direction: column; gap: 10px; }
+.bar-row { display: flex; align-items: center; gap: 12px; }
+.bar-label { font-size: 12px; color: var(--text2); width: 160px; min-width: 160px; }
+.bar-track { flex: 1; height: 20px; background: var(--bg4); border-radius: 4px; overflow: hidden; position: relative; }
+.bar-fill { height: 100%; border-radius: 4px; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; transition: width .5s; }
+.bar-fill span { font-size: 11px; font-weight: 600; color: #fff; white-space: nowrap; }
+
+/* Stacked bar */
+.stacked-bar { height: 32px; display: flex; border-radius: 6px; overflow: hidden; margin: 12px 0; }
+.stacked-segment { display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; color: #fff; transition: width .5s; cursor: default; }
+.legend { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; }
+.legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text2); }
+.legend-dot { width: 8px; height: 8px; border-radius: 2px; }
+
+/* Teams table */
+.teams-table { width: 100%; border-collapse: collapse; }
+.teams-table th { font-size: 11px; color: var(--text3); font-weight: 500; text-transform: uppercase; letter-spacing: .5px; padding: 8px 12px; border-bottom: 1px solid var(--border); text-align: left; }
+.teams-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); font-size: 13px; }
+.teams-table tr:hover td { background: var(--bg3); }
+.rank-medal { font-size: 16px; }
+.eff-bar { width: 80px; height: 6px; background: var(--bg4); border-radius: 3px; display: inline-block; vertical-align: middle; margin-right: 6px; overflow: hidden; }
+.eff-fill { height: 100%; border-radius: 3px; }
+
+/* Competence bars */
+.comp-item { margin-bottom: 14px; }
+.comp-header { display: flex; justify-content: space-between; margin-bottom: 5px; }
+.comp-name { font-size: 13px; font-weight: 500; }
+.comp-weight { font-size: 12px; font-family: 'JetBrains Mono', monospace; color: var(--accent); }
+.comp-bar { height: 6px; background: var(--bg4); border-radius: 3px; overflow: hidden; }
+.comp-fill { height: 100%; border-radius: 3px; }
+.comp-type-badge { font-size: 10px; padding: 2px 6px; border-radius: 3px; margin-left: 6px; }
+.type-hard { background: rgba(79,142,247,.15); color: var(--accent); }
+.type-soft { background: rgba(46,204,113,.15); color: var(--green); }
+.type-domain { background: rgba(155,89,182,.15); color: var(--purple); }
+
+/* KPI table */
+.kpi-table { width: 100%; border-collapse: collapse; }
+.kpi-table th { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: .5px; padding: 8px 12px; border-bottom: 1px solid var(--border); text-align: left; font-weight: 500; }
+.kpi-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); font-size: 12px; vertical-align: top; }
+.kpi-cat-badge { padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; white-space: nowrap; }
+
+/* Benchmarks */
+.bench-table { width: 100%; border-collapse: collapse; }
+.bench-table th { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: .5px; padding: 8px 12px; border-bottom: 1px solid var(--border); text-align: left; font-weight: 500; }
+.bench-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); font-size: 13px; }
+.bench-table tr:hover td { background: var(--bg3); }
+.disclaimer { background: rgba(241,196,15,.08); border: 1px solid rgba(241,196,15,.2); border-radius: 8px; padding: 12px 16px; font-size: 12px; color: var(--yellow); display: flex; gap: 8px; align-items: flex-start; }
+.squad-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.squad-role { background: var(--bg3); border-radius: 6px; padding: 10px 12px; display: flex; justify-content: space-between; align-items: center; }
+.squad-role-name { font-size: 12px; color: var(--text2); }
+.squad-role-fte { font-size: 14px; font-weight: 600; font-family: 'JetBrains Mono', monospace; color: var(--accent); }
+
+/* Add team form */
+.add-team-form { background: var(--bg3); border-radius: 10px; padding: 16px; border: 1px dashed var(--border2); }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+/* Divider */
+hr { border: none; border-top: 1px solid var(--border); }
+
+/* Misc */
+.row { display: flex; gap: 12px; align-items: center; }
+.flex-1 { flex: 1; }
+.text-green { color: var(--green); }
+.text-yellow { color: var(--yellow); }
+.text-red { color: var(--red); }
+.text-accent { color: var(--accent); }
+.text-muted { color: var(--text3); }
+.fw600 { font-weight: 600; }
+.mt8 { margin-top: 8px; }
+.mt16 { margin-top: 16px; }
+.mb8 { margin-bottom: 8px; }
+.gap8 { gap: 8px; }
+
+/* NL command bar */
+.nl-bar { background: var(--bg2); border-bottom: 1px solid var(--border); padding: 10px 24px; display: flex; gap: 10px; align-items: center; }
+.nl-bar input { flex: 1; background: var(--bg3); border: 1px solid var(--border); color: var(--text); padding: 10px 14px; border-radius: 8px; font-size: 13px; font-family: inherit; }
+.nl-bar input:focus { outline: none; border-color: var(--accent); }
+.nl-bar .nl-icon { color: var(--accent); font-size: 16px; }
+.nl-status { font-size: 12px; color: var(--text3); padding: 4px 24px 10px; background: var(--bg2); border-bottom: 1px solid var(--border); display: none; }
+.nl-status.show { display: flex; align-items: center; gap: 8px; }
+
+@media (max-width: 1100px) {
+  .page.active { flex-direction: column; height: auto; }
+  .sidebar { width: 100%; min-width: 0; border-right: none; border-bottom: 1px solid var(--border); }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Staff<span>Optima</span> <span style="color:var(--text3);font-weight:400;font-size:13px">Bank</span></div>
+  <nav>
+    <button class="active" onclick="showTab(0)">① Анализ штата</button>
+    <button onclick="showTab(1)">② Стоимость</button>
+    <button onclick="showTab(2)">③ Команды</button>
+    <button onclick="showTab(3)">④ Компетенции</button>
+    <button onclick="showTab(4)">⑤ KPI</button>
+    <button onclick="showTab(5)">⑥ Бенчмарки</button>
+  </nav>
+  <div class="api-key-wrap">
+    <label>API Key</label>
+    <input type="password" class="api-input" id="apiKey" placeholder="sk-ant-..." />
+  </div>
+</header>
+
+<div class="nl-bar">
+  <span class="nl-icon">✦</span>
+  <input type="text" id="nlQuery" placeholder="Спросите обычным языком: «Рассчитай показатели для банка с штатом 5000, доходом 250 млрд, IT 800 человек» или «Что если сократить бэк-офис на 20%?»" onkeydown="if(event.key==='Enter')runNLQuery()">
+  <button class="btn btn-primary" onclick="runNLQuery()">Выполнить</button>
+</div>
+<div class="nl-status" id="nlStatus"></div>
+
+<!-- =============== TAB 1: АНАЛИЗ ШТАТА =============== -->
+<div class="page active" id="tab0">
+  <div class="sidebar">
+    <div class="sidebar-section">
+      <h3>Профиль банка</h3>
+      <div class="field">
+        <label>Модель банка</label>
+        <select id="bankModel">
+          <option value="digital">Цифровой уровня DBS (Сингапур)</option>
+          <option value="universal">Универсальный (JPMorgan / Goldman)</option>
+          <option value="classic">Классический в трансформации</option>
+          <option value="neo">Финтех / Big Tech (Stripe / Apple / Google)</option>
+        </select>
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <h3>B2C (Розница)</h3>
+      <div class="field"><label>Доход план, млрд ₸/год</label><input type="number" id="b2cRevenue" value="180" min="0"></div>
+      <div class="field"><label>Штат, чел.</label><input type="number" id="b2cStaff" value="3200" min="0"></div>
+      <div class="field"><label>MAU, млн</label><input type="number" id="b2cMAU" value="4.2" min="0" step="0.1"></div>
+    </div>
+    <div class="sidebar-section">
+      <h3>B2B (Корпоративный + МСБ)</h3>
+      <div class="field"><label>Доход план, млрд ₸/год</label><input type="number" id="b2bRevenue" value="120" min="0"></div>
+      <div class="field"><label>Штат, чел.</label><input type="number" id="b2bStaff" value="1800" min="0"></div>
+      <div class="field"><label>Клиентов, тыс.</label><input type="number" id="b2bClients" value="45" min="0"></div>
+    </div>
+    <div class="sidebar-section">
+      <h3>Invest (Инвестиционный)</h3>
+      <div class="field"><label>Доход план, млрд ₸/год</label><input type="number" id="invRevenue" value="60" min="0"></div>
+      <div class="field"><label>Штат, чел.</label><input type="number" id="invStaff" value="600" min="0"></div>
+      <div class="field"><label>AUM, млрд ₸</label><input type="number" id="invAUM" value="320" min="0"></div>
+    </div>
+    <div class="sidebar-section">
+      <h3>Технологии</h3>
+      <div class="field"><label>IT-штат, чел.</label><input type="number" id="itStaff" value="1400" min="0"></div>
+      <div class="field"><label>Число сквадов</label><input type="number" id="squads" value="38" min="0"></div>
+      <div class="field"><label>Инженеров (из IT)</label><input type="number" id="engineers" value="900" min="0"></div>
+      <div class="field"><label>Релизов/мес</label><input type="number" id="releases" value="120" min="0"></div>
+    </div>
+    <div class="sidebar-section">
+      <h3>Общие параметры</h3>
+      <div class="field"><label>Штат всего, чел.</label><input type="number" id="totalStaff" value="7800" min="0"></div>
+      <div class="field"><label>Бэк-офис, чел.</label><input type="number" id="backOffice" value="2100" min="0"></div>
+      <div class="field"><label>CIR цель, %</label><input type="number" id="cirTarget" value="45" min="0" max="100"></div>
+      <div class="field"><label>Текучесть IT, %</label><input type="number" id="itTurnover" value="18" min="0" max="100"></div>
+      <div class="field"><label>Курс ₸/USD</label><input type="number" id="exchangeRate" value="450" min="1"></div>
+      <div class="field"><label>Стратегические цели года</label><textarea id="stratGoals" rows="3">Рост MAU на 30%, выход на рынок МСБ-кредитования, запуск AI-скоринга</textarea></div>
+    </div>
+    <button class="btn btn-primary btn-full" onclick="runAnalysis()">▶ Запустить анализ</button>
+  </div>
+
+  <div class="main" id="main1">
+    <div class="empty-state" id="emptyState1">
+      <div class="icon">📊</div>
+      <div style="font-size:16px;font-weight:600;color:var(--text2)">Анализ штата</div>
+      <p>Заполните параметры в боковой панели и нажмите «Запустить анализ» для расчёта метрик и AI-рекомендаций</p>
+    </div>
+    <div id="analysisResults" style="display:none">
+      <!-- Metrics will be rendered here -->
+    </div>
+  </div>
+</div>
+
+<!-- =============== TAB 2: СТОИМОСТЬ ПЕРСОНАЛА =============== -->
+<div class="page" id="tab1">
+  <div class="sidebar">
+    <div class="sidebar-section">
+      <h3>Статьи TCW, млрд ₸/год</h3>
+      <div class="field"><label>ФОТ gross</label><input type="number" id="c_fot" value="62" min="0" step="0.1"></div>
+      <div class="field"><label>Бонусы и премии</label><input type="number" id="c_bonus" value="14" min="0" step="0.1"></div>
+      <div class="field"><label>Налоги и социальные взносы</label><input type="number" id="c_tax" value="8.5" min="0" step="0.1"></div>
+      <div class="field"><label>Бенефиты и ДМС</label><input type="number" id="c_benefits" value="4.2" min="0" step="0.1"></div>
+      <div class="field"><label>Лицензии ПО и рабочие места</label><input type="number" id="c_licenses" value="3.8" min="0" step="0.1"></div>
+      <div class="field"><label>Найм + обучение</label><input type="number" id="c_hire" value="2.5" min="0" step="0.1"></div>
+    </div>
+    <div class="sidebar-section">
+      <h3>Параметры для скрытых расходов</h3>
+      <div class="field"><label>IT-штат, чел.</label><input type="number" id="c_itStaff" value="1400" min="0"></div>
+      <div class="field"><label>Текучесть IT, %</label><input type="number" id="c_itTurnover" value="18" min="0"></div>
+      <div class="field"><label>Штат всего, чел.</label><input type="number" id="c_totalStaff" value="7800" min="0"></div>
+    </div>
+    <button class="btn btn-primary btn-full mt8" onclick="calcCosts()">▶ Рассчитать</button>
+  </div>
+  <div class="main" id="costMain">
+    <div class="card">
+      <div class="card-title"><div class="dot"></div>Структура полной стоимости персонала (TCW)</div>
+      <div id="tcwTotal" class="mono" style="font-size:28px;font-weight:700;color:var(--accent);margin-bottom:8px">— млрд ₸/год</div>
+      <div id="stackedBarWrap"></div>
+      <div id="legendWrap"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><div class="dot" style="background:var(--yellow)"></div>Ключевые коэффициенты</div>
+      <div class="metrics-grid" id="costMetrics"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><div class="dot" style="background:var(--red)"></div>Скрытые расходы текучести IT</div>
+      <div id="hiddenCosts"></div>
+    </div>
+  </div>
+</div>
+
+<!-- =============== TAB 3: СРАВНЕНИЕ КОМАНД =============== -->
+<div class="page" id="tab2">
+  <div class="sidebar">
+    <div class="sidebar-section">
+      <h3>Добавить команду</h3>
+      <div class="field"><label>Название команды</label><input type="text" id="teamName" placeholder="Например: Squad Антифрод"></div>
+      <div class="field">
+        <label>Бизнес-линия</label>
+        <select id="teamLine">
+          <option value="B2C">B2C</option>
+          <option value="B2B">B2B</option>
+          <option value="Invest">Invest</option>
+          <option value="Platform">Платформа</option>
+        </select>
+      </div>
+      <div class="field"><label>Численность, чел.</label><input type="number" id="teamSize" value="8" min="1"></div>
+      <div class="field"><label>Полная стоимость, млн ₸/год</label><input type="number" id="teamCost" value="180" min="0"></div>
+      <div class="field"><label>Создаваемая ценность, млн ₸/год</label><input type="number" id="teamValue" value="520" min="0"></div>
+      <button class="btn btn-primary btn-full" onclick="addTeam()">+ Добавить команду</button>
+    </div>
+    <div class="sidebar-section">
+      <h3>Управление</h3>
+      <button class="btn btn-secondary btn-full mb8" onclick="loadDemoTeams()">📋 Загрузить демо-данные</button>
+      <button class="btn btn-secondary btn-full mb8" onclick="clearTeams()">🗑 Очистить список</button>
+      <button class="btn btn-primary btn-full" id="analyzeTeamsBtn" onclick="analyzeTeams()" disabled>🤖 AI-анализ команд</button>
+    </div>
+  </div>
+  <div class="main">
+    <div class="card" id="teamSummary" style="display:none">
+      <div class="card-title"><div class="dot"></div>Сводка</div>
+      <div class="metrics-grid" id="teamSummaryMetrics"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><div class="dot"></div>Рейтинг команд по Efficiency Score</div>
+      <div id="teamsEmpty" class="empty-state" style="padding:30px">
+        <div class="icon">👥</div>
+        <p>Добавьте команды вручную или загрузите демо-данные</p>
+      </div>
+      <div id="teamsTable" style="display:none">
+        <table class="teams-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Команда</th>
+              <th>Линия</th>
+              <th>FTE</th>
+              <th>Стоимость, млн ₸</th>
+              <th>Ценность, млн ₸</th>
+              <th>Eff. Score</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="teamsBody"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="ai-block" id="teamsAI" style="display:none">
+      <h4><span class="ai-icon">✦</span> AI-анализ эффективности команд</h4>
+      <div class="ai-content" id="teamsAIContent"></div>
+    </div>
+  </div>
+</div>
+
+<!-- =============== TAB 4: КОМПЕТЕНЦИИ =============== -->
+<div class="page" id="tab3">
+  <div class="sidebar">
+    <div class="sidebar-section">
+      <h3>Выбор роли</h3>
+      <div class="field">
+        <label>Роль из пресетов</label>
+        <select id="rolePreset" onchange="onRolePreset()">
+          <option value="">— выбрать —</option>
+          <option value="Product Owner">Product Owner</option>
+          <option value="Backend Engineer (core banking)">Backend Engineer (core banking)</option>
+          <option value="Mobile Engineer">Mobile Engineer</option>
+          <option value="Data Scientist / ML">Data Scientist / ML</option>
+          <option value="Data Analyst">Data Analyst</option>
+          <option value="QA Engineer">QA Engineer</option>
+          <option value="DevOps / Platform Engineer">DevOps / Platform Engineer</option>
+          <option value="Tribe Lead">Tribe Lead</option>
+          <option value="UX/UI Designer">UX/UI Designer</option>
+          <option value="Риск-менеджер">Риск-менеджер</option>
+          <option value="Комплаенс-офицер">Комплаенс-офицер</option>
+          <option value="Клиентский менеджер B2B">Клиентский менеджер B2B</option>
+          <option value="Менеджер по продажам Invest">Менеджер по продажам Invest</option>
+          <option value="Scrum Master">Scrum Master</option>
+        </select>
+      </div>
+      <div class="field"><label>Или введите произвольную роль / контекст</label><textarea id="roleCustom" rows="3" placeholder="Например: Backend Engineer в скваде Антифрод"></textarea></div>
+      <button class="btn btn-primary btn-full" onclick="generateCompetencies()">🤖 Сгенерировать профиль</button>
+    </div>
+    <div class="sidebar-section" id="compTypeSummary" style="display:none">
+      <h3>Распределение по типам</h3>
+      <div id="compTypeStats"></div>
+    </div>
+  </div>
+  <div class="main">
+    <div class="empty-state" id="compEmpty">
+      <div class="icon">🎯</div>
+      <div style="font-size:16px;font-weight:600;color:var(--text2)">Профиль компетенций</div>
+      <p>Выберите роль из пресетов или введите произвольную роль, затем нажмите «Сгенерировать профиль»</p>
+    </div>
+    <div id="compResults" style="display:none">
+      <div class="card">
+        <div class="card-title" id="compRoleTitle"><div class="dot"></div>Профиль: загрузка...</div>
+        <div id="compList"></div>
+      </div>
+    </div>
+    <div class="ai-block" id="compAIBlock" style="display:none">
+      <h4><span class="ai-icon">✦</span> AI-анализ</h4>
+      <div class="ai-content" id="compAIContent"></div>
+    </div>
+  </div>
+</div>
+
+<!-- =============== TAB 5: KPI-КОНСТРУКТОР =============== -->
+<div class="page" id="tab4">
+  <div class="sidebar">
+    <div class="sidebar-section">
+      <h3>Контекст банка</h3>
+      <div class="field"><label>Модель банка</label>
+        <select id="kpiModel">
+          <option value="digital">Цифровой (DBS-класс)</option>
+          <option value="universal">Универсальный (JPMorgan)</option>
+          <option value="classic">Классический</option>
+          <option value="neo">Финтех / Big Tech</option>
+        </select>
+      </div>
+      <div class="field"><label>Штат всего, чел.</label><input type="number" id="kpiStaff" value="7800"></div>
+      <div class="field"><label>Доход всего, млрд ₸</label><input type="number" id="kpiRevenue" value="360"></div>
+      <div class="field"><label>TCW, млрд ₸</label><input type="number" id="kpiTCW" value="95"></div>
+      <div class="field"><label>IT-штат, чел.</label><input type="number" id="kpiITStaff" value="1400"></div>
+      <div class="field"><label>Текучесть IT, %</label><input type="number" id="kpiITTurnover" value="18"></div>
+      <div class="field"><label>Стратегические цели</label><textarea id="kpiGoals" rows="3">Рост MAU на 30%, выход на МСБ-кредитование</textarea></div>
+    </div>
+    <button class="btn btn-primary btn-full" onclick="generateKPIs()">🤖 Сгенерировать 12 KPI</button>
+  </div>
+  <div class="main">
+    <div class="empty-state" id="kpiEmpty">
+      <div class="icon">📐</div>
+      <div style="font-size:16px;font-weight:600;color:var(--text2)">KPI-конструктор</div>
+      <p>Укажите контекст банка и нажмите «Сгенерировать» — AI создаст систему из 12 KPI с таргетами на основе бенчмарков</p>
+    </div>
+    <div id="kpiResults" style="display:none">
+      <div class="card">
+        <div class="card-title"><div class="dot"></div>Система KPI эффективности персонала</div>
+        <table class="kpi-table" id="kpiTable">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>KPI</th>
+              <th>Категория</th>
+              <th>Формула</th>
+              <th>Таргет</th>
+              <th>Периодичность</th>
+              <th>Владелец</th>
+            </tr>
+          </thead>
+          <tbody id="kpiBody"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="ai-block" id="kpiLoading" style="display:none">
+      <h4><span class="ai-icon">✦</span> Генерация KPI...</h4>
+      <div class="ai-content loading"><div class="spinner"></div>AI анализирует контекст и формирует систему KPI...</div>
+    </div>
+  </div>
+</div>
+
+<!-- =============== TAB 6: БЕНЧМАРКИ =============== -->
+<div class="page" id="tab5">
+  <div class="sidebar">
+    <div class="sidebar-section">
+      <h3>Фильтр модели</h3>
+      <div class="field">
+        <select id="benchModel" onchange="renderBenchmarks()">
+          <option value="digital">Цифровой банк (DBS-класс)</option>
+          <option value="universal">Универсальный (JPMorgan / Goldman)</option>
+          <option value="classic">Классический</option>
+          <option value="neo">Финтех / Big Tech</option>
+        </select>
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <h3>Эталонный состав сквада</h3>
+      <div class="squad-grid" id="squadGrid"></div>
+      <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border)">
+        <div class="row" style="justify-content:space-between">
+          <span style="font-size:12px;color:var(--text2)">Итого FTE на сквад</span>
+          <span class="mono fw600" style="color:var(--accent)">≈ 7.2</span>
+        </div>
+        <div style="font-size:11px;color:var(--text3);margin-top:6px">Оптимум сквадов = Инженеры ÷ 5 (середина 4–6)</div>
+      </div>
+    </div>
+  </div>
+  <div class="main">
+    <div class="disclaimer">⚠️ <span>Ориентиры рассчитаны на основе публичной отчётности. Перед презентацией правлению обязательно сверьте с актуальными годовыми отчётами компаний.</span></div>
+    <div class="card">
+      <div class="card-title" id="benchTitle"><div class="dot"></div>Бенчмарки: Цифровой банк (DBS-класс)</div>
+      <table class="bench-table" id="benchTable">
+        <thead>
+          <tr>
+            <th>Метрика</th>
+            <th>Значение / диапазон</th>
+            <th>Контекст / источник</th>
+          </tr>
+        </thead>
+        <tbody id="benchBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   STATE
+   ============================================================ */
+let teams = [];
+let analysisData = null;
+
+const BENCH_DATA = {
+  digital: [
+    ['TCW / Доход', '15–25%', 'У эффективных международных игроков < 25%'],
+    ['Доля IT в штате', '30–40%', 'DBS ~1/3 штата в tech (инсорсинг 90%+), JPMorgan ~20%, Big Tech 50%+'],
+    ['Доход на сотрудника', '$350–550K', 'Goldman ~$1.1M, JPMorgan ~$520K, DBS ~$400K'],
+    ['CIR', '38–42%', 'DBS ~39–40% — лучший в классе; JPMorgan ~55%, Goldman ~62%'],
+    ['Доля бэк-офиса', '20–30%', 'DBS автоматизировал операции через AI/ML; цель < 30%'],
+    ['Размер сквада', '7–9 чел.', 'Amazon two-pizza; Spotify 6–12; DBS platform operating model'],
+    ['Инженеров на сквад', '4–6', 'Big Tech: инженеры:продакты ~6–8:1; банки ~5:1'],
+    ['MAU на сотрудника', '300–800', 'Stripe и Big Tech 2000+, цифровые банки 300–800, классика < 400'],
+    ['Релизов / сквад / мес', '2–8', 'Elite DORA — deploy on demand; DBS — недельные циклы'],
+    ['Текучесть IT', '10–15%', 'Big Tech и сингапурские банки; > 20% — потеря экспертизы'],
+    ['Коэффициент полной стоимости', '×1.35–1.55 от ФОТ', 'В США с equity до ×1.6–1.8 (Big Tech)'],
+    ['Стоимость замены IT-специалиста', '50–100% годовой стоимости', 'Поиск + онбординг + ramp-up (6 мес)'],
+    ['Span of control', '6–8 прямых', 'Google/Meta для EM до 8–10; Amazon — two-pizza ownership'],
+    ['QA : инженеры', '1:3–4', 'Big Tech при зрелых автотестах 1:6–10 (SDET-модель)'],
+  ],
+  universal: [
+    ['TCW / Доход', '25–35%', 'JPMorgan ~CIR 55%, Goldman ~62%; высокая доля фиксированных расходов'],
+    ['Доля IT в штате', '15–25%', 'JPMorgan ~57K технологов из ~270K (~21%); активная цифровизация'],
+    ['Доход на сотрудника', '$400–700K', 'JPMorgan ~$520K, Goldman ~$1.1M (высокие бонусы IB)'],
+    ['CIR', '50–62%', 'JPMorgan ~55%, Goldman ~62% — высокие операционные расходы'],
+    ['Доля бэк-офиса', '30–45%', 'Большой compliance-аппарат, регуляторные требования'],
+    ['Размер сквада', '7–9 чел.', 'Переход к agile; гибрид со старыми структурами'],
+    ['Инженеров на сквад', '3–5', 'Зависит от legacy vs digital-продуктов'],
+    ['MAU на сотрудника', '200–500', 'Разные продукты, включая нецифровые каналы'],
+    ['Релизов / сквад / мес', '1–4', 'Legacy IT замедляет циклы; DevOps в процессе внедрения'],
+    ['Текучесть IT', '15–20%', 'Конкуренция с Big Tech за таланты'],
+    ['Коэффициент полной стоимости', '×1.4–1.6 от ФОТ', 'Высокие бонусы, особенно в IB-подразделениях'],
+    ['Стоимость замены IT-специалиста', '60–120% годовой стоимости', 'Сложнее нанять из-за legacy-экспертизы'],
+    ['Span of control', '5–7 прямых', 'Более иерархическая структура'],
+    ['QA : инженеры', '1:2–3', 'Высокие требования к качеству в core-banking'],
+  ],
+  classic: [
+    ['TCW / Доход', '35–50%', 'Высокие операционные расходы, неоптимальный штат'],
+    ['Доля IT в штате', '8–15%', 'Низкая доля IT — основная точка роста; аутсорсинг'],
+    ['Доход на сотрудника', '$150–300K', 'Низкая производительность из-за ручных процессов'],
+    ['CIR', '55–75%', 'Типично для банков в трансформации; высокая доля расходов'],
+    ['Доля бэк-офиса', '40–60%', 'Много ручных операций, требует автоматизации'],
+    ['Размер сквада', 'Нет / 5–8', 'Начальная стадия перехода к agile'],
+    ['Инженеров на сквад', '2–4', 'Дефицит инженеров; зависимость от вендоров'],
+    ['MAU на сотрудника', '50–200', 'Низкая цифровизация клиентского опыта'],
+    ['Релизов / сквад / мес', '0.5–2', 'Медленные циклы из-за монолитной архитектуры'],
+    ['Текучесть IT', '20–35%', 'Высокая из-за невысоких зарплат vs рынок'],
+    ['Коэффициент полной стоимости', '×1.3–1.45 от ФОТ', 'Меньше бенефитов; эконом-пакет'],
+    ['Стоимость замены IT-специалиста', '50–80% годовой стоимости', 'Легче найти junior, сложнее senior'],
+    ['Span of control', '8–15 прямых', 'Плоская структура из-за дефицита менеджеров'],
+    ['QA : инженеры', '1:2', 'Недостаток автотестирования'],
+  ],
+  neo: [
+    ['TCW / Доход', '5–15%', 'Stripe, Apple, Google — высокая выручка на сотрудника'],
+    ['Доля IT в штате', '50–70%', 'Big Tech: инженеры — основа бизнеса'],
+    ['Доход на сотрудника', '$1M–$2.5M+', 'Apple ~$2.4M, Google ~$1.9M, Stripe ~$3M+'],
+    ['CIR', '20–35%', 'Высокая автоматизация, масштаб без пропорционального роста штата'],
+    ['Доля бэк-офиса', '5–15%', 'Максимальная автоматизация операций'],
+    ['Размер сквада', '4–8 чел.', 'Amazon two-pizza; Spotify squad; очень компактные команды'],
+    ['Инженеров на сквад', '5–8', 'Ratio инженеры:продакты до 8:1'],
+    ['MAU на сотрудника', '2000–10000+', 'Масштаб при минимальном штате'],
+    ['Релизов / сквад / мес', '10–30+', 'CI/CD, deploy on demand, trunk-based development'],
+    ['Текучесть IT', '8–12%', 'Высокие зарплаты + equity удерживают таланты'],
+    ['Коэффициент полной стоимости', '×1.6–1.8 от ФОТ', 'Equity grants, бонусы, премиальные бенефиты'],
+    ['Стоимость замены IT-специалиста', '100–200% годовой стоимости', 'Узкий рынок senior-специалистов'],
+    ['Span of control', '6–10 прямых', 'Google/Meta EM до 10; автономные команды'],
+    ['QA : инженеры', '1:6–10', 'SDET-модель, CI/CD, высокая автоматизация тестов'],
+  ],
+};
+
+const SQUAD_ROLES = [
+  {name:'Product Owner', fte:1},
+  {name:'Backend Engineer', fte:2.5},
+  {name:'Frontend / Mobile Engineer', fte:1.5},
+  {name:'QA Engineer', fte:1},
+  {name:'Designer', fte:0.4},
+  {name:'Data Analyst', fte:0.5},
+  {name:'DevOps (платформа)', fte:0.3},
+];
+
+const COLORS = ['#4f8ef7','#2ecc71','#f1c40f','#e74c3c','#9b59b6','#1abc9c'];
+const KPI_CAT_COLORS = {
+  'Стоимость персонала':'rgba(79,142,247,.2)',
+  'Эффективность штата':'rgba(46,204,113,.2)',
+  'Продуктовая скорость':'rgba(241,196,15,.2)',
+  'Клиентские':'rgba(26,188,156,.2)',
+  'Таланты':'rgba(155,89,182,.2)',
+};
+const KPI_CAT_TEXT = {
+  'Стоимость персонала':'var(--accent)',
+  'Эффективность штата':'var(--green)',
+  'Продуктовая скорость':'var(--yellow)',
+  'Клиентские':'var(--teal)',
+  'Таланты':'var(--purple)',
+};
+
+/* ============================================================
+   UTILS
+   ============================================================ */
+function getApiKey(){ return document.getElementById('apiKey').value.trim(); }
+
+function fmtNum(n, dec=1){ return typeof n==='number'?n.toFixed(dec).replace(/\.0$/,''):n; }
+
+function getBenchForModel(model){
+  const bench = {
+    digital:  {tcwRev:[15,25], itShare:[30,40], revPerFte:[350,550], cir:[38,42], backOffice:[20,30], squadSize:[7,9], engPerSquad:[4,6], mauPerFte:[300,800], relPerSquad:[2,8], itTurnover:[10,15]},
+    universal:{tcwRev:[25,35], itShare:[15,25], revPerFte:[400,700], cir:[50,62], backOffice:[30,45], squadSize:[7,9], engPerSquad:[3,5], mauPerFte:[200,500], relPerSquad:[1,4], itTurnover:[15,20]},
+    classic:  {tcwRev:[35,50], itShare:[8,15],  revPerFte:[150,300], cir:[55,75], backOffice:[40,60], squadSize:[5,8], engPerSquad:[2,4], mauPerFte:[50,200],  relPerSquad:[0.5,2], itTurnover:[20,35]},
+    neo:      {tcwRev:[5,15],  itShare:[50,70], revPerFte:[1000,2500],cir:[20,35], backOffice:[5,15],  squadSize:[4,8], engPerSquad:[5,8], mauPerFte:[2000,10000],relPerSquad:[10,30],itTurnover:[8,12]},
+  };
+  return bench[model]||bench.digital;
+}
+
+function inRange(val, [lo, hi]){ return val>=lo && val<=hi; }
+function badge(val, rng, inverted=false){
+  const ok = inRange(val,rng);
+  const bad = inverted ? val<=rng[0] : val>=rng[1];
+  if(ok) return 'badge-green';
+  if(bad) return 'badge-red';
+  return 'badge-yellow';
+}
+
+async function callClaude(systemPrompt, userPrompt){
+  const key = getApiKey();
+  if(!key) { alert('Введите Anthropic API Key в поле в шапке'); throw new Error('No API key'); }
+  const resp = await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{
+      'Content-Type':'application/json',
+      'x-api-key': key,
+      'anthropic-version':'2023-06-01',
+      'anthropic-dangerous-direct-browser-access':'true',
+    },
+    body: JSON.stringify({
+      model:'claude-sonnet-4-6',
+      max_tokens:2000,
+      system: systemPrompt,
+      messages:[{role:'user',content:userPrompt}],
+    })
+  });
+  if(!resp.ok){ const e=await resp.json(); throw new Error(e.error?.message||resp.statusText); }
+  const data=await resp.json();
+  return data.content[0].text;
+}
+
+async function callClaudeJSON(systemPrompt, userPrompt){
+  const text = await callClaude(systemPrompt, userPrompt);
+  const clean = text.replace(/```json\n?/g,'').replace(/```\n?/g,'').trim();
+  return JSON.parse(clean);
+}
+
+/* ============================================================
+   TAB NAVIGATION
+   ============================================================ */
+function showTab(i){
+  document.querySelectorAll('.page').forEach((p,idx)=>p.classList.toggle('active',idx===i));
+  document.querySelectorAll('nav button').forEach((b,idx)=>b.classList.toggle('active',idx===i));
+  if(i===5) renderBenchmarks();
+  if(i===1) calcCosts();
+}
+
+/* ============================================================
+   TAB 1: ANALYSIS
+   ============================================================ */
+function gv(id){ return parseFloat(document.getElementById(id).value)||0; }
+function gs(id){ return document.getElementById(id).value; }
+
+function computeMetrics(){
+  const b2cR=gv('b2cRevenue'), b2cS=gv('b2cStaff'), b2cMAU=gv('b2cMAU');
+  const b2bR=gv('b2bRevenue'), b2bS=gv('b2bStaff');
+  const invR=gv('invRevenue'), invS=gv('invStaff');
+  const itS=gv('itStaff'), sq=gv('squads'), eng=gv('engineers'), rel=gv('releases');
+  const total=gv('totalStaff'), back=gv('backOffice'), cir=gv('cirTarget'), itTurn=gv('itTurnover');
+  const rate=gv('exchangeRate')||450;
+  const model=gs('bankModel');
+
+  // TCW from cost tab if filled, else estimate
+  const fot=gv('c_fot')||0, bon=gv('c_bonus')||0, tax=gv('c_tax')||0, ben=gv('c_benefits')||0, lic=gv('c_licenses')||0, hir=gv('c_hire')||0;
+  const tcw = fot+bon+tax+ben+lic+hir || total*0.012; // ~12млн ₸/чел если не введено
+  const totalRev=b2cR+b2bR+invR;
+
+  const tcwPerFTE = total>0 ? tcw/total*1000 : 0; // млн ₸
+  const tcwToRev = totalRev>0 ? tcw/totalRev*100 : 0;
+  const roi = tcw>0 ? (totalRev-tcw)/tcw : 0;
+  const revPerFTE_USD = total>0 ? totalRev*1e9/rate/total/1000 : 0;
+  const itShare = total>0 ? itS/total*100 : 0;
+  const backShare = total>0 ? back/total*100 : 0;
+  const optSquads = eng>0 ? Math.round(eng/5) : 0;
+  const relPerSquad = sq>0 ? rel/sq : 0;
+  const mauPerFTE = total>0 ? b2cMAU*1e6/total : 0;
+
+  // Digital Maturity Index
+  const b=getBenchForModel(model);
+  let dmi=100;
+  const pen=[18,18,14,14,12,12];
+  const checks=[
+    inRange(itShare, b.itShare),
+    inRange(tcwToRev, b.tcwRev),
+    inRange(backShare, [b.backOffice[0], b.backOffice[1]]) === false ? false : backShare<=b.backOffice[1],
+    inRange(relPerSquad, b.relPerSquad),
+    inRange(itTurn, b.itTurnover),
+    b2cMAU>0 && inRange(mauPerFTE, b.mauPerFte),
+  ];
+  checks.forEach((ok,i)=>{ if(!ok) dmi-=pen[i]; });
+  dmi=Math.max(20,dmi);
+
+  return {b2cR,b2bR,invR,totalRev,b2cS,b2bS,invS,itS,sq,eng,rel,total,back,cir,itTurn,
+    tcw,tcwPerFTE,tcwToRev,roi,revPerFTE_USD,itShare,backShare,optSquads,relPerSquad,mauPerFTE,dmi,
+    model, rate, b2cMAU, b};
+}
+
+function runAnalysis(){
+  const m=computeMetrics();
+  analysisData=m;
+  document.getElementById('emptyState1').style.display='none';
+  const res=document.getElementById('analysisResults');
+  res.style.display='flex';
+  res.style.flexDirection='column';
+  res.style.gap='20px';
+
+  const b=m.b;
+  const dmiColor = m.dmi>=80?'var(--green)':m.dmi>=55?'var(--yellow)':'var(--red)';
+  const dmiLabel = m.dmi>=80?'Высокий уровень':m.dmi>=55?'Средний уровень':'Ниже нормы';
+
+  res.innerHTML=`
+  <!-- DMI -->
+  <div class="card">
+    <div class="card-title"><div class="dot" style="background:${dmiColor}"></div>Digital Maturity Index</div>
+    <div class="row gap8">
+      <div class="dmi-score" style="color:${dmiColor}">${m.dmi}</div>
+      <div>
+        <div style="font-size:13px;font-weight:600;color:${dmiColor}">${dmiLabel}</div>
+        <div style="font-size:12px;color:var(--text3)">из 100 баллов</div>
+      </div>
+    </div>
+    <div class="dmi-bar"><div class="dmi-fill" style="width:${m.dmi}%;background:${dmiColor}"></div></div>
+  </div>
+
+  <!-- Основные метрики -->
+  <div class="card">
+    <div class="card-title"><div class="dot"></div>Ключевые метрики эффективности</div>
+    <div class="metrics-grid">
+      ${metric('TCW / Доход', fmtNum(m.tcwToRev)+'%', `Бенчмарк: ${b.tcwRev[0]}–${b.tcwRev[1]}%`, badge(m.tcwToRev, b.tcwRev, true))}
+      ${metric('ROI Workforce', fmtNum(m.roi)+'x', '(Доход − TCW) / TCW')}
+      ${metric('Доход на FTE', '$'+fmtNum(m.revPerFTE_USD)+'K', `Бенчмарк: $${b.revPerFte[0]}–${b.revPerFte[1]}K`, badge(m.revPerFTE_USD, b.revPerFte))}
+      ${metric('Доля IT в штате', fmtNum(m.itShare)+'%', `Бенчмарк: ${b.itShare[0]}–${b.itShare[1]}%`, badge(m.itShare, b.itShare))}
+      ${metric('Доля бэк-офиса', fmtNum(m.backShare)+'%', `Бенчмарк: < ${b.backOffice[1]}%`, m.backShare<=b.backOffice[1]?'badge-green':'badge-red')}
+      ${metric('TCW, млрд ₸', fmtNum(m.tcw,1), `На FTE: ${fmtNum(m.tcwPerFTE,1)} млн ₸`)}
+      ${metric('MAU / сотрудник', fmtNum(m.mauPerFTE,0), `Бенчмарк: ${b.mauPerFte[0]}–${b.mauPerFte[1]}`, badge(m.mauPerFTE, b.mauPerFte))}
+      ${metric('Релизов / сквад / мес', fmtNum(m.relPerSquad,1), `Бенчмарк: ${b.relPerSquad[0]}–${b.relPerSquad[1]}`, badge(m.relPerSquad, b.relPerSquad))}
+      ${metric('Текучесть IT', fmtNum(m.itTurn)+'%', `Бенчмарк: ${b.itTurnover[0]}–${b.itTurnover[1]}%`, badge(m.itTurn, b.itTurnover, true))}
+      ${metric('Оптимум сквадов', m.optSquads+'', `Факт: ${m.sq} сквадов (${m.eng} инженеров)`)}
+    </div>
+  </div>
+
+  <!-- По бизнес-линиям -->
+  <div class="card">
+    <div class="card-title"><div class="dot" style="background:var(--purple)"></div>Бизнес-линии</div>
+    <div class="metrics-grid">
+      ${metric('B2C доход', fmtNum(m.b2cR)+' млрд ₸', `${m.b2cS} чел., MAU ${m.b2cMAU}M`)}
+      ${metric('B2C TCW (est.)', fmtNum(m.total>0?m.tcw*m.b2cS/m.total:0,1)+' млрд ₸', 'Пропорционально численности')}
+      ${metric('B2B доход', fmtNum(m.b2bR)+' млрд ₸', `${m.b2bS} чел.`)}
+      ${metric('Invest доход', fmtNum(m.invR)+' млрд ₸', `${m.invS} чел.`)}
+    </div>
+  </div>
+
+  <!-- AI Block -->
+  <div class="ai-block" id="aiAnalysisBlock">
+    <h4><span class="ai-icon">✦</span> AI-анализ достаточности штата и рекомендации</h4>
+    <div class="ai-content loading" id="aiAnalysisContent">
+      <div class="spinner"></div>Анализирую данные...
+    </div>
+  </div>
+  `;
+
+  runAIAnalysis(m);
+}
+
+function metric(label, value, sub, badgeClass=''){
+  return `<div class="metric">
+    <div class="metric-label">${label}</div>
+    <div class="metric-value mono">${value}</div>
+    ${sub?`<div class="metric-sub">${sub}</div>`:''}
+    ${badgeClass?`<span class="metric-badge ${badgeClass}">${badgeClass.includes('green')?'✓ В норме':badgeClass.includes('red')?'✗ Вне нормы':'~ Погранично'}</span>`:''}
+  </div>`;
+}
+
+async function runAIAnalysis(m){
+  const el=document.getElementById('aiAnalysisContent');
+  try{
+    const sys=`Ты эксперт по оргдизайну цифровых банков и TCW-анализу. Отвечай на русском. Будь конкретным, используй цифры из данных. Не используй markdown-заголовки уровня #, только прямой текст с абзацами.`;
+    const user=`Банк: модель — ${m.model}, штат ${m.total} чел., IT-штат ${m.itS} (${fmtNum(m.itShare)}%), TCW ${fmtNum(m.tcw)} млрд ₸, доход ${fmtNum(m.totalRev)} млрд ₸, TCW/доход ${fmtNum(m.tcwToRev)}%, доход/FTE $${fmtNum(m.revPerFTE_USD)}K, текучесть IT ${m.itTurn}%, бэк-офис ${fmtNum(m.backShare)}%, DMI ${m.dmi}/100. Стратегические цели: ${gs('stratGoals')}.
+
+Проанализируй:
+1. Достаточность/избыточность штата по каждой бизнес-линии с учётом TCW
+2. Окупаемость стоимости персонала
+3. Зоны избытка (кандидаты на автоматизацию) и дефицита
+4. Топ-3 рекомендации на 2 квартала с оценкой эффекта в деньгах
+Ответ 350–450 слов, конкретно, без воды.`;
+    const text=await callClaude(sys,user);
+    el.classList.remove('loading');
+    el.innerHTML=text;
+  } catch(e){
+    el.classList.remove('loading');
+    el.style.color='var(--red)';
+    el.textContent='Ошибка AI: '+e.message;
+  }
+}
+
+/* ============================================================
+   TAB 2: COSTS
+   ============================================================ */
+function calcCosts(){
+  const items=[
+    {label:'ФОТ gross', id:'c_fot', color:COLORS[0]},
+    {label:'Бонусы и премии', id:'c_bonus', color:COLORS[1]},
+    {label:'Налоги и соц. взносы', id:'c_tax', color:COLORS[2]},
+    {label:'Бенефиты / ДМС', id:'c_benefits', color:COLORS[3]},
+    {label:'Лицензии / рабочие места', id:'c_licenses', color:COLORS[4]},
+    {label:'Найм + обучение', id:'c_hire', color:COLORS[5]},
+  ];
+  const vals=items.map(x=>parseFloat(document.getElementById(x.id).value)||0);
+  const tcw=vals.reduce((a,b)=>a+b,0);
+  const fot=vals[0]||1;
+
+  document.getElementById('tcwTotal').textContent=fmtNum(tcw,2)+' млрд ₸/год';
+
+  // Stacked bar
+  const barHtml=tcw>0?items.map((x,i)=>{
+    const pct=vals[i]/tcw*100;
+    return pct>2?`<div class="stacked-segment" style="width:${pct}%;background:${x.color}" title="${x.label}: ${fmtNum(vals[i],2)} млрд ₸ (${fmtNum(pct)}%)">${fmtNum(pct)}%</div>`:
+      `<div style="width:${pct}%;background:${x.color}" title="${x.label}"></div>`;
+  }).join('') : '<div style="flex:1;background:var(--bg4);border-radius:6px;height:32px"></div>';
+  document.getElementById('stackedBarWrap').innerHTML=`<div class="stacked-bar">${barHtml}</div>`;
+
+  const legHtml=items.map((x,i)=>`<div class="legend-item"><div class="legend-dot" style="background:${x.color}"></div>${x.label}: <strong>${fmtNum(vals[i],2)} млрд</strong></div>`).join('');
+  document.getElementById('legendWrap').innerHTML=`<div class="legend">${legHtml}</div>`;
+
+  // Key coefficients
+  const coeff=tcw/fot;
+  const totalS=gv('c_totalStaff')||1;
+  const tcwPerFTE=tcw/totalS*1000;
+  document.getElementById('costMetrics').innerHTML=`
+    ${metric('TCW', fmtNum(tcw,2)+' млрд ₸', 'Полная стоимость персонала')}
+    ${metric('ФОТ', fmtNum(fot,2)+' млрд ₸', `${fmtNum(fot/tcw*100)}% от TCW`)}
+    ${metric('Коэффициент полной стоимости', '×'+fmtNum(coeff,2), 'Норма ×1.35–1.55', inRange(coeff,[1.35,1.55])?'badge-green':coeff<1.35?'badge-yellow':'badge-red')}
+    ${metric('TCW на FTE', fmtNum(tcwPerFTE,1)+' млн ₸', `(${totalS} сотрудников)`)}
+  `;
+
+  // Hidden costs
+  const itS=gv('c_itStaff')||0;
+  const itTurn=(gv('c_itTurnover')||0)/100;
+  const itFTECost=tcwPerFTE*1.6; // млн ₸
+  const fires=itS*itTurn;
+  const turnoverCost=fires*0.75*itFTECost;
+  const rampupCost=fires*itFTECost*0.5*0.5;
+  const vacancyCost=fires*3.5/12*itFTECost;
+
+  document.getElementById('hiddenCosts').innerHTML=`
+    <div class="metrics-grid">
+      ${metric('Увольнений IT / год', fmtNum(fires,0)+' чел.', `${itS} чел. × ${fmtNum(itTurn*100)}%`)}
+      ${metric('Стоимость текучести IT', fmtNum(turnoverCost,1)+' млн ₸', 'Поиск + найм + онбординг')}
+      ${metric('Потери ramp-up', fmtNum(rampupCost,1)+' млн ₸', '6 мес. @ 50% продуктивности')}
+      ${metric('Простой вакансий', fmtNum(vacancyCost,1)+' млн ₸', 'Средний срок закрытия 3.5 мес.')}
+      ${metric('Итого скрытые расходы', fmtNum(turnoverCost+rampupCost+vacancyCost,1)+' млн ₸/год', 'Потери от текучести IT')}
+    </div>
+    <div class="ai-block mt16" style="border-color:var(--yellow)">
+      <h4><span style="color:var(--yellow)">⚠</span> Что это значит</h4>
+      <div class="ai-content" style="color:var(--text2)">Снижение текучести IT с ${fmtNum(itTurn*100)}% до 12% (бенчмарк цифрового банка) сэкономит около <strong style="color:var(--green)">${fmtNum((fires - itS*0.12)*0.75*itFTECost,0)} млн ₸/год</strong> только на стоимости замены. Это аргумент для бюджета удержания: инвестиция в retention-программу окупается, если снизит текучесть хотя бы на 3–5 п.п.</div>
+    </div>
+  `;
+}
+
+/* ============================================================
+   TAB 3: TEAMS
+   ============================================================ */
+const DEMO_TEAMS=[
+  {name:'Squad Онбординг', line:'B2C', size:8, cost:190, value:680},
+  {name:'Squad Кредиты B2C', line:'B2C', size:9, cost:210, value:920},
+  {name:'Squad Платежи', line:'B2C', size:7, cost:165, value:430},
+  {name:'Squad МСБ-кредиты', line:'B2B', size:9, cost:220, value:540},
+  {name:'Squad Корп. клиенты', line:'B2B', size:7, cost:175, value:380},
+  {name:'Squad Invest-продукты', line:'Invest', size:6, cost:180, value:490},
+  {name:'Squad Антифрод', line:'Platform', size:8, cost:195, value:320},
+  {name:'Squad Data Platform', line:'Platform', size:7, cost:185, value:210},
+  {name:'Squad DevOps/Infra', line:'Platform', size:6, cost:160, value:180},
+];
+
+function addTeam(){
+  const name=document.getElementById('teamName').value.trim();
+  if(!name){alert('Введите название команды');return;}
+  teams.push({
+    name,
+    line:document.getElementById('teamLine').value,
+    size:parseInt(document.getElementById('teamSize').value)||1,
+    cost:parseFloat(document.getElementById('teamCost').value)||0,
+    value:parseFloat(document.getElementById('teamValue').value)||0,
+  });
+  renderTeams();
+}
+
+function loadDemoTeams(){ teams=DEMO_TEAMS.map(t=>({...t})); renderTeams(); }
+function clearTeams(){ teams=[]; renderTeams(); }
+function removeTeam(i){ teams.splice(i,1); renderTeams(); }
+
+function renderTeams(){
+  const empty=document.getElementById('teamsEmpty');
+  const table=document.getElementById('teamsTable');
+  const summary=document.getElementById('teamSummary');
+  const aiBtn=document.getElementById('analyzeTeamsBtn');
+
+  if(teams.length===0){
+    empty.style.display='flex'; table.style.display='none';
+    summary.style.display='none'; aiBtn.disabled=true;
+    return;
+  }
+  empty.style.display='none'; table.style.display='block';
+  summary.style.display='block'; aiBtn.disabled=false;
+
+  const scored=teams.map(t=>({...t, eff:t.cost>0?t.value/t.cost:0}))
+    .sort((a,b)=>b.eff-a.eff);
+
+  const maxEff=scored[0]?.eff||1;
+  const avgEff=scored.reduce((s,t)=>s+t.eff,0)/scored.length;
+
+  document.getElementById('teamSummaryMetrics').innerHTML=`
+    ${metric('Команд всего', teams.length+'', '')}
+    ${metric('Средний Efficiency Score', fmtNum(avgEff,2)+'x', 'Ценность / Стоимость')}
+    ${metric('Лидер', scored[0]?.name||'—', fmtNum(maxEff,2)+'x')}
+    ${metric('Аутсайдер', scored[scored.length-1]?.name||'—', fmtNum(scored[scored.length-1]?.eff||0,2)+'x')}
+  `;
+
+  const tbody=document.getElementById('teamsBody');
+  tbody.innerHTML=scored.map((t,i)=>{
+    const effColor=t.eff>=4?'var(--green)':t.eff>=2.5?'var(--yellow)':'var(--red)';
+    const medal=i===0?'🥇':i===1?'🥈':i===2?'🥉':'';
+    const barW=Math.min(100,t.eff/maxEff*100);
+    const origIdx=teams.findIndex(x=>x.name===t.name);
+    return `<tr>
+      <td><span class="rank-medal">${medal||''}</span><span class="mono text-muted">${i+1}</span></td>
+      <td style="font-weight:500">${t.name}</td>
+      <td><span class="metric-badge badge-blue">${t.line}</span></td>
+      <td class="mono">${t.size}</td>
+      <td class="mono">${fmtNum(t.cost,1)}</td>
+      <td class="mono">${fmtNum(t.value,1)}</td>
+      <td>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div class="eff-bar"><div class="eff-fill" style="width:${barW}%;background:${effColor}"></div></div>
+          <span class="mono fw600" style="color:${effColor}">${fmtNum(t.eff,2)}x</span>
+        </div>
+      </td>
+      <td><button class="btn btn-danger btn-sm" onclick="removeTeam(${origIdx})">✕</button></td>
+    </tr>`;
+  }).join('');
+}
+
+async function analyzeTeams(){
+  const aiBlock=document.getElementById('teamsAI');
+  const aiContent=document.getElementById('teamsAIContent');
+  aiBlock.style.display='block';
+  aiContent.innerHTML='<div class="loading"><div class="spinner"></div>Анализирую команды...</div>';
+  try{
+    const scored=teams.map(t=>({...t,eff:t.cost>0?t.value/t.cost:0})).sort((a,b)=>b.eff-a.eff);
+    const sys=`Ты эксперт по оргдизайну продуктовых команд банка. Отвечай по-русски. Дай практичный анализ без воды.`;
+    const user=`Рейтинг команд банка по Efficiency Score (Ценность / Стоимость):
+${scored.map((t,i)=>`${i+1}. ${t.name} (${t.line}): ${t.size} чел., стоимость ${fmtNum(t.cost,1)} млн ₸, ценность ${fmtNum(t.value,1)} млн ₸, ES=${fmtNum(t.eff,2)}x`).join('\n')}
+
+Проанализируй:
+1. Гипотезы о причинах разрыва между лидерами и аутсайдерами (стадия продукта, недоукомплектованность, методика аллокации)
+2. Корректность сравнения платформенных команд с продуктовыми, способы нормировки
+3. Конкретные действия по 2–3 наименее эффективным командам (усилить / переформатировать / слить)
+4. ОБЯЗАТЕЛЬНО: предостережение против использования рейтинга как инструмента наказания.
+Объём 300–400 слов.`;
+    const text=await callClaude(sys,user);
+    aiContent.innerHTML=text;
+  } catch(e){
+    aiContent.innerHTML=`<span style="color:var(--red)">Ошибка: ${e.message}</span>`;
+  }
+}
+
+/* ============================================================
+   TAB 4: COMPETENCIES
+   ============================================================ */
+function onRolePreset(){
+  const v=document.getElementById('rolePreset').value;
+  if(v) document.getElementById('roleCustom').value='';
+}
+
+async function generateCompetencies(){
+  const preset=document.getElementById('rolePreset').value;
+  const custom=document.getElementById('roleCustom').value.trim();
+  const role=custom||preset;
+  if(!role){alert('Выберите роль или введите описание');return;}
+
+  document.getElementById('compEmpty').style.display='none';
+  const res=document.getElementById('compResults');
+  res.style.display='block';
+  document.getElementById('compRoleTitle').innerHTML=`<div class="dot"></div>Профиль: <span class="pulse text-muted">генерация...</span>`;
+  document.getElementById('compList').innerHTML=`<div class="loading" style="display:flex;gap:8px;padding:16px;color:var(--text3)"><div class="spinner"></div>AI формирует профиль компетенций...</div>`;
+  document.getElementById('compTypeSummary').style.display='none';
+  document.getElementById('compAIBlock').style.display='none';
+
+  try{
+    const sys=`Ты эксперт по компетенционным моделям цифровых банков. Отвечай СТРОГО в JSON без markdown-блоков. Сумма весов должна равняться ровно 100.`;
+    const user=`Создай профиль компетенций для роли: ${role}.
+Верни JSON массив из 8–10 объектов:
+[{"name":"...", "weight":N, "type":"Hard|Soft|Domain", "description":"...", "strong_indicator":"что отличает сильного от среднего", "assessment":"метод оценки"}]
+Типы: Hard (технические), Soft (поведенческие), Domain (банковская специфика: регуляторика, риски, платёжные системы).
+Сумма weight = 100 ровно.`;
+    const data=await callClaudeJSON(sys,user);
+
+    document.getElementById('compRoleTitle').innerHTML=`<div class="dot"></div>Профиль компетенций: ${role}`;
+
+    // Render bars
+    const typeColors={'Hard':'var(--accent)','Soft':'var(--green)','Domain':'var(--purple)'};
+    const html=data.map(c=>{
+      const col=typeColors[c.type]||'var(--accent)';
+      return `<div class="comp-item">
+        <div class="comp-header">
+          <div class="comp-name">${c.name}<span class="comp-type-badge type-${c.type.toLowerCase()}">${c.type}</span></div>
+          <div class="comp-weight">${c.weight}%</div>
+        </div>
+        <div class="comp-bar"><div class="comp-fill" style="width:${c.weight}%;background:${col}"></div></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px">${c.description}</div>
+        <div style="font-size:11px;color:var(--teal);margin-top:2px">✦ ${c.strong_indicator}</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:2px">Оценка: ${c.assessment}</div>
+      </div>`;
+    }).join('<hr style="margin:12px 0">');
+    document.getElementById('compList').innerHTML=html;
+
+    // Type summary
+    const typeSums={Hard:0,Soft:0,Domain:0};
+    data.forEach(c=>typeSums[c.type]=(typeSums[c.type]||0)+c.weight);
+    document.getElementById('compTypeStats').innerHTML=
+      Object.entries(typeSums).map(([t,w])=>`
+        <div style="margin-bottom:8px">
+          <div class="comp-header"><div style="font-size:12px;color:var(--text2)">${t}</div><span class="mono" style="color:${typeColors[t]}">${w}%</span></div>
+          <div class="comp-bar"><div class="comp-fill" style="width:${w}%;background:${typeColors[t]}"></div></div>
+        </div>`).join('');
+    document.getElementById('compTypeSummary').style.display='block';
+
+    // AI summary
+    document.getElementById('compAIBlock').style.display='block';
+    document.getElementById('compAIContent').innerHTML='<div class="loading" style="display:flex;gap:8px;color:var(--text3)"><div class="spinner"></div>Формирую описание...</div>';
+    const aiSys=`Ты HR-эксперт цифрового банка. Кратко и по делу на русском.`;
+    const aiUser=`Для роли «${role}» сформирован профиль из ${data.length} компетенций (Hard ${typeSums.Hard||0}%, Soft ${typeSums.Soft||0}%, Domain ${typeSums.Domain||0}%). Топ-3 компетенции: ${data.sort((a,b)=>b.weight-a.weight).slice(0,3).map(c=>c.name+'('+c.weight+'%)').join(', ')}.
+Напиши 2–3 абзаца: (1) почему такое распределение, (2) как применять веса при найме и оценке, (3) основные риски при найме без учёта профиля.`;
+    const aiText=await callClaude(aiSys,aiUser);
+    document.getElementById('compAIContent').innerHTML=aiText;
+  } catch(e){
+    document.getElementById('compList').innerHTML=`<div style="color:var(--red);padding:16px">Ошибка: ${e.message}</div>`;
+  }
+}
+
+/* ============================================================
+   TAB 5: KPI
+   ============================================================ */
+async function generateKPIs(){
+  document.getElementById('kpiEmpty').style.display='none';
+  document.getElementById('kpiResults').style.display='none';
+  document.getElementById('kpiLoading').style.display='block';
+  try{
+    const ctx={
+      model:gs('kpiModel'), staff:gv('kpiStaff'), revenue:gv('kpiRevenue'),
+      tcw:gv('kpiTCW'), itStaff:gv('kpiITStaff'), itTurnover:gv('kpiITTurnover'),
+      goals:gs('kpiGoals'),
+    };
+    const sys=`Ты эксперт по KPI-системам банка. Отвечай СТРОГО в JSON без markdown.`;
+    const user=`Банк: модель ${ctx.model}, штат ${ctx.staff}, доход ${ctx.revenue} млрд ₸, TCW ${ctx.tcw} млрд ₸, IT-штат ${ctx.itStaff}, текучесть IT ${ctx.itTurnover}%. Стратегические цели: ${ctx.goals}.
+
+Создай ровно 12 KPI эффективности персонала с учётом TCW. Обязательные категории: Стоимость персонала, Эффективность штата, Продуктовая скорость, Клиентские, Таланты.
+Верни JSON массив из 12 объектов:
+[{"name":"...", "category":"...", "formula":"...", "target":"...", "frequency":"...", "owner":"..."}]
+category — одна из: Стоимость персонала, Эффективность штата, Продуктовая скорость, Клиентские, Таланты.`;
+    const data=await callClaudeJSON(sys,user);
+    document.getElementById('kpiLoading').style.display='none';
+    document.getElementById('kpiResults').style.display='block';
+    const tbody=document.getElementById('kpiBody');
+    tbody.innerHTML=data.map((k,i)=>{
+      const bg=KPI_CAT_COLORS[k.category]||'rgba(255,255,255,.05)';
+      const col=KPI_CAT_TEXT[k.category]||'var(--text2)';
+      return `<tr>
+        <td class="mono text-muted">${i+1}</td>
+        <td style="font-weight:500">${k.name}</td>
+        <td><span class="kpi-cat-badge" style="background:${bg};color:${col}">${k.category}</span></td>
+        <td style="font-size:11px;color:var(--text3)">${k.formula}</td>
+        <td class="mono" style="color:var(--accent)">${k.target}</td>
+        <td style="font-size:12px;color:var(--text2)">${k.frequency}</td>
+        <td style="font-size:12px;color:var(--text2)">${k.owner}</td>
+      </tr>`;
+    }).join('');
+  } catch(e){
+    document.getElementById('kpiLoading').style.display='none';
+    document.getElementById('kpiEmpty').style.display='flex';
+    alert('Ошибка: '+e.message);
+  }
+}
+
+/* ============================================================
+   TAB 6: BENCHMARKS
+   ============================================================ */
+function renderBenchmarks(){
+  const model=document.getElementById('benchModel').value;
+  const data=BENCH_DATA[model]||BENCH_DATA.digital;
+  const labels={digital:'Цифровой банк (DBS-класс)',universal:'Универсальный (JPMorgan / Goldman)',classic:'Классический в трансформации',neo:'Финтех / Big Tech'};
+  document.getElementById('benchTitle').innerHTML=`<div class="dot"></div>Бенчмарки: ${labels[model]||model}`;
+  const tbody=document.getElementById('benchBody');
+  tbody.innerHTML=data.map(([m,v,ctx])=>`<tr>
+    <td style="font-weight:500">${m}</td>
+    <td class="mono" style="color:var(--accent)">${v}</td>
+    <td style="font-size:12px;color:var(--text2)">${ctx}</td>
+  </tr>`).join('');
+
+  // Squad grid
+  document.getElementById('squadGrid').innerHTML=SQUAD_ROLES.map(r=>`
+    <div class="squad-role">
+      <div class="squad-role-name">${r.name}</div>
+      <div class="squad-role-fte">${r.fte}</div>
+    </div>`).join('');
+}
+
+/* ============================================================
+   NATURAL LANGUAGE QUERY
+   ============================================================ */
+const NL_FIELDS = {
+  bankModel:'модель банка: digital|universal|classic|neo',
+  b2cRevenue:'доход B2C, млрд ₸', b2cStaff:'штат B2C, чел', b2cMAU:'MAU B2C, млн',
+  b2bRevenue:'доход B2B, млрд ₸', b2bStaff:'штат B2B, чел', b2bClients:'клиентов B2B, тыс',
+  invRevenue:'доход Invest, млрд ₸', invStaff:'штат Invest, чел', invAUM:'AUM, млрд ₸',
+  itStaff:'IT-штат, чел', squads:'число сквадов', engineers:'число инженеров', releases:'релизов/мес',
+  totalStaff:'штат всего, чел', backOffice:'бэк-офис, чел', cirTarget:'CIR цель, %',
+  itTurnover:'текучесть IT, %', exchangeRate:'курс ₸/USD', stratGoals:'стратегические цели (текст)',
+  c_fot:'ФОТ gross, млрд ₸', c_bonus:'бонусы, млрд ₸', c_tax:'налоги и взносы, млрд ₸',
+  c_benefits:'бенефиты/ДМС, млрд ₸', c_licenses:'лицензии ПО, млрд ₸', c_hire:'найм+обучение, млрд ₸',
+  c_itStaff:'IT-штат (вкладка стоимости), чел', c_itTurnover:'текучесть IT (вкладка стоимости), %',
+  c_totalStaff:'штат всего (вкладка стоимости), чел',
+};
+
+function nlStatus(msg, loading=false){
+  const el=document.getElementById('nlStatus');
+  if(!msg){ el.classList.remove('show'); el.innerHTML=''; return; }
+  el.classList.add('show');
+  el.innerHTML=(loading?'<div class="spinner"></div>':'')+msg;
+}
+
+async function runNLQuery(){
+  const q=document.getElementById('nlQuery').value.trim();
+  if(!q) return;
+  nlStatus('AI разбирает запрос и планирует расчёт...', true);
+  try{
+    const currentValues={};
+    Object.keys(NL_FIELDS).forEach(id=>{ const e=document.getElementById(id); if(e) currentValues[id]=e.value; });
+    const sys=`Ты — управляющий модуль платформы StaffOptima Bank (анализ штата банка). Пользователь пишет запрос обычным языком, ты переводишь его в действия платформы. Отвечай СТРОГО в JSON без markdown:
+{"fields": {"<field_id>": <значение>, ...}, "actions": ["runAnalysis"|"calcCosts"|"showTab0".."showTab5"], "comment": "краткое пояснение на русском, что ты сделал и какие допущения принял"}
+Доступные поля (id: описание): ${JSON.stringify(NL_FIELDS)}.
+Текущие значения: ${JSON.stringify(currentValues)}.
+Правила: меняй только поля, упомянутые или выводимые из запроса; делай разумные допущения и фиксируй их в comment; для сценариев "что если" пересчитай зависимые поля; всегда добавляй уместное действие (runAnalysis для анализа штата, calcCosts для стоимости). Числа — числа, не строки.`;
+    const data=await callClaudeJSON(sys, q);
+
+    // Apply fields
+    const applied=[];
+    Object.entries(data.fields||{}).forEach(([id,val])=>{
+      const el=document.getElementById(id);
+      if(el){ el.value=val; applied.push(NL_FIELDS[id]?.split(',')[0]||id); }
+    });
+
+    // Run actions
+    (data.actions||[]).forEach(a=>{
+      if(a==='runAnalysis'){ showTab(0); runAnalysis(); }
+      else if(a==='calcCosts'){ showTab(1); calcCosts(); }
+      else if(/^showTab[0-5]$/.test(a)) showTab(parseInt(a.slice(7)));
+    });
+
+    nlStatus(`✓ ${data.comment||'Готово'}${applied.length?` · Обновлено полей: ${applied.length}`:''}`);
+  } catch(e){
+    nlStatus(`<span style="color:var(--red)">Ошибка: ${e.message}</span>`);
+  }
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+renderTeams();
+renderBenchmarks();
+calcCosts();
+</script>
+</body>
+</html>
