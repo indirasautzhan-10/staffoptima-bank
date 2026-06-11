@@ -216,8 +216,9 @@ hr { border: none; border-top: 1px solid var(--border); }
     <button onclick="showTab(5)">⑥ Бенчмарки</button>
   </nav>
   <div class="api-key-wrap">
+    <span class="metric-badge badge-yellow" id="demoBadge" title="AI-блоки показывают демо-примеры. Вставьте API-ключ Anthropic для реального AI.">ДЕМО-РЕЖИМ</span>
     <label>API Key</label>
-    <input type="password" class="api-input" id="apiKey" placeholder="sk-ant-..." />
+    <input type="password" class="api-input" id="apiKey" placeholder="необязательно" oninput="updateDemoBadge()" />
   </div>
 </header>
 
@@ -1292,6 +1293,12 @@ async function runNLQuery(){
   } catch(e){
     nlStatus(`<span style="color:var(--red)">Ошибка: ${e.message}</span>`);
   }
+}
+
+function updateDemoBadge(){
+  const b=document.getElementById('demoBadge');
+  if(getApiKey()){ b.textContent='AI ПОДКЛЮЧЁН'; b.className='metric-badge badge-green'; }
+  else { b.textContent='ДЕМО-РЕЖИМ'; b.className='metric-badge badge-yellow'; }
 }
 
 /* ============================================================
