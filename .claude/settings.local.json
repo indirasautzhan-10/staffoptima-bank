@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(claude-api)",
+      "Skill(claude-api:*)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(git init *)",
+      "Bash(gh auth *)",
+      "Bash(git -C /Users/indiraashirova/Desktop/GrowVibeProjects remote -v)",
+      "Read(//opt/homebrew/bin/**)",
+      "Bash(git add *)",
+      "Bash(git commit -m 'StaffOptima Bank — workforce intelligence platform MVP *)",
+      "Bash(brew install *)",
+      "Bash(ssh -o BatchMode=yes -o StrictHostKeyChecking=accept-new -T git@github.com)",
+      "Bash(gh repo *)",
+      "Bash(git commit -m 'Add mock mode \\(works without API key\\) and NL query bar *)",
+      "Bash(git push *)"
+    ]
+  }
+}
