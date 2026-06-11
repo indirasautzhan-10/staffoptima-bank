@@ -8,23 +8,24 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #0d0f14;
-  --bg2: #13161d;
-  --bg3: #1a1e27;
-  --bg4: #222733;
-  --border: #2a2f3d;
-  --border2: #343b4f;
-  --text: #e8eaf0;
-  --text2: #9aa3b8;
-  --text3: #5d6478;
-  --accent: #4f8ef7;
-  --accent2: #3a7bd5;
-  --green: #2ecc71;
-  --yellow: #f1c40f;
-  --red: #e74c3c;
-  --purple: #9b59b6;
-  --orange: #e67e22;
-  --teal: #1abc9c;
+  /* Halyk Bank style: светлая тема, фирменный зелёный + золотой */
+  --bg: #f3f5f7;
+  --bg2: #ffffff;
+  --bg3: #f5f7f9;
+  --bg4: #eceff2;
+  --border: #e3e8ed;
+  --border2: #d2d9e0;
+  --text: #1d2733;
+  --text2: #56616f;
+  --text3: #8d97a5;
+  --accent: #00a651;
+  --accent2: #008c44;
+  --green: #00a651;
+  --yellow: #f5b800;
+  --red: #e0382e;
+  --purple: #7a5fb5;
+  --orange: #ef7d00;
+  --teal: #00a99d;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; font-size: 14px; }
@@ -71,7 +72,7 @@ nav button.active { background: var(--bg3); color: var(--accent); font-weight: 5
 .btn-full { width: 100%; justify-content: center; }
 
 /* Cards */
-.card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+.card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 20px; box-shadow: 0 1px 3px rgba(29,39,51,.06); }
 .card-title { font-size: 13px; font-weight: 600; color: var(--text2); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
 .card-title .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
 
